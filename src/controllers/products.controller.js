@@ -25,7 +25,27 @@ const getProduct = async (req, res) => {
     }
 }
 
+const updateProduct = async (req, res) => {
+
+    // recibo la id del producto
+     const {_id , name , price , description , stock , image  } = req.body
+    try {
+        const productMatch = await Product.findById(_id)
+          productMatch.name = name
+          productMatch.price = price
+          productMatch.description = description
+          productMatch.stock = stock
+          productMatch.image = image
+          const update =  await  productMatch.save()
+
+        res.status(200).json(update)
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 
 module.exports = {postProduct,
- getProduct
+ getProduct , updateProduct
 }
