@@ -45,7 +45,21 @@ const updateProduct = async (req, res) => {
     }
 }
 
+const deleteProduct = async (req, res) => {
+    const _id = req.params._id
+
+
+    try {
+        
+        const productMatch = await Product.deleteOne(_id)
+         res.json(productMatch)
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 
 module.exports = {postProduct,
- getProduct , updateProduct
+ getProduct , updateProduct, deleteProduct
 }
