@@ -27,7 +27,7 @@ const getProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
 
-    // recibo la id del producto
+
      const {_id , name , price , description , stock , image  } = req.body
     try {
         const productMatch = await Product.findById(_id)
@@ -46,13 +46,16 @@ const updateProduct = async (req, res) => {
 }
 
 const deleteProduct = async (req, res) => {
+
     const _id = req.params._id
 
 
     try {
         
-        const productMatch = await Product.deleteOne(_id)
-         res.json(productMatch)
+        const productMatch = await Product.findById(_id)
+         productMatch.exits = false
+        await productMatch.save()
+         res.status(200).json(productMatch)
 
     } catch (error) {
         console.log(error)

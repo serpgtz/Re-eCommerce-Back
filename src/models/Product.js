@@ -27,7 +27,14 @@ const productsShema = mongoose.Schema({
         type : String,
         required : true,
        
-    }
+    },
+
+    exits :{
+        type : Boolean,
+        default : true,
+    },
+   
+
 })
 
 const Product = mongoose.model('Product', productsShema )
