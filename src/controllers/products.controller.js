@@ -27,7 +27,7 @@ const getProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
 
-    // recibo la id del producto
+
      const {_id , name , price , description , stock , image  } = req.body
     try {
         const productMatch = await Product.findById(_id)
@@ -45,7 +45,27 @@ const updateProduct = async (req, res) => {
     }
 }
 
+const deleteProduct = async (req, res) => {
+
+    const _id = req.params.id
+
+
+    try {
+        
+        // no se elimina de la bdd pero si tendra la propiedad existe : false 
+        const productMatch = await Product.findById(_id)
+        
+         productMatch.exits = true
+         
+        const update = await productMatch.save()
+         res.status(200).json(update)
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 
 module.exports = {postProduct,
- getProduct , updateProduct
+ getProduct , updateProduct, deleteProduct
 }
