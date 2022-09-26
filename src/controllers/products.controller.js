@@ -55,7 +55,7 @@ const deleteProduct = async (req, res) => {
         // no se elimina de la bdd pero si tendra la propiedad existe : false 
         const productMatch = await Product.findById(_id)
         
-         productMatch.exits = true
+         productMatch.exits = false
          
         const update = await productMatch.save()
          res.status(200).json(update)
