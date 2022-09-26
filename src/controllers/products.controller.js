@@ -14,5 +14,18 @@ const postProduct = async (req, res) => {
     }
 }
 
+const getProduct = async (req, res) => {
+ 
+    try {
+        const products = await Product.find()
 
-module.exports = {postProduct}
+        res.status(200).json(products)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+module.exports = {postProduct,
+ getProduct
+}
