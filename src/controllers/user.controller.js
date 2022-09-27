@@ -38,26 +38,17 @@ const getUser = async (req, res) => {
   }
 };
 
-const getUserByQuery = async (req, res) => {
-  const username = req.query.username;
-  try {
-    if (username) {
-      const user = await User.find({ username: username.toLowerCase() });
-      res.status(200).json(user);
-    }
-  } catch (error) {
-    res.status(404).send(error);
-  }
-};
-
 const getAllUsers = async (req, res) => {
-  // const query = req.query.new;
+  const { username } = req.query;
   try {
-    //Sólo en caso de emergencia
-    //   const users = query
-    //     ? await User.find().sort({ _id: -1 }).limit(5)
-    //     : await User.find();
     const users = await User.find();
+    if (username) {
+      const userInQuery = users.filter((u) =>
+        u.username.toLowerCase().includes(username.toLowerCase())
+      );
+      if (userInQuery) return res.status(200).json(userInQuery);
+      else res.status(404).send(`No se encontró a ${username}`);
+    }
     res.status(200).json(users);
   } catch (error) {
     res.status(500).send(error);
@@ -79,5 +70,4 @@ module.exports = {
   getUser,
   getAllUsers,
   deleteUser,
-  getUserByQuery,
 };
