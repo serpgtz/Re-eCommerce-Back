@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const generateId = require("../helper/generateId");
 
 const UserSchema = mongoose.Schema({
   username: {
@@ -19,6 +20,15 @@ const UserSchema = mongoose.Schema({
     required: true,
     default: false,
   },
+  token: {
+    type: String,
+    default: generateId(),
+  },
+
+  confirmed : {
+    type : Boolean,
+    default : false,
+  }
 });
 
 const User = mongoose.model("User", UserSchema);
