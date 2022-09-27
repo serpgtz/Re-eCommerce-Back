@@ -9,6 +9,7 @@ const {
 const router = Router();
 
 router.post("/register", createNewUser);
+router.get("/confirm/:token", confirmUser);
 router.get("/users", getAllUsers);
 router.get("/users/:id", getUser);
 router.put("/users/:id", modifyUser);
