@@ -4,25 +4,30 @@ const UserSchema = mongoose.Schema({
   username: {
     type: String,
     required: true,
-  },
+  },    
+  name : {
+        type : String, //minLength(3),
+        required : true,
+    },
 
-  email: {
-    type: String,
-    Uniquie: true,
-    required: true,
-  },
+    email : {
+        type : String,
+        Unique : true,
+        required : true,
+        
+    },
+    password : {
+        type : String,
+        required : true,
+    },
+    admin : {
+        type : Boolean,
+        required : true,
+        default: false
+    },
 
-  password: {
-    type: String,
-    required: true,
-  },
-
-  /* 
-     
-    
-    
-    */
-});
+  
+})
 
 const User = mongoose.model("User", UserSchema);
 
