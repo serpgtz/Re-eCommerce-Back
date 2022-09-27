@@ -23,10 +23,26 @@ const productsShema = mongoose.Schema({
         required: true,
     },
 
+    countInStock : {
+        type : Number,
+        required: true,
+        default: 0
+    },
+
     image : {
         type : String,
         required : true,
        
+    },
+    rating: {
+        type: Number,
+        required: true,
+        default: 0
+    },
+    numReviews:{
+        type: Number,
+        required: true,
+        default: 0
     }
 })
 
