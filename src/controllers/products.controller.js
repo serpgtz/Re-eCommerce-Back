@@ -15,9 +15,17 @@ const postProduct = async (req, res) => {
 }
 
 const getProduct = async (req, res) => {
- 
+   const {name} = req.query
     try {
         const products = await Product.find()
+        if(name) {
+            const productQuery = products.filter(f => f.name.toLowerCase().includes(name.toLowerCase()))
+            if(productQuery) return res.status(200).json(productQuery)
+            else res.status(404).json({error : true , msg : 'producto no encontrado'})
+        }
+        
+
+
 
         res.status(200).json(products)
     } catch (error) {
@@ -55,7 +63,7 @@ const deleteProduct = async (req, res) => {
         // no se elimina de la bdd pero si tendra la propiedad existe : false 
         const productMatch = await Product.findById(_id)
         
-         productMatch.exits = false
+         productMatch.exists = false
          
         const update = await productMatch.save()
          res.status(200).json(update)
@@ -63,9 +71,18 @@ const deleteProduct = async (req, res) => {
     } catch (error) {
         console.log(error)
     }
+} 
+
+const getProductId = async (req, res) => {
+    try {
+        const productMatch = await Product.findById(req.params.id)
+        res.status(200).json(productMatch)
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 
 module.exports = {postProduct,
- getProduct , updateProduct, deleteProduct
+ getProduct , updateProduct, deleteProduct, getProductId
 }
