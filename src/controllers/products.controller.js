@@ -17,15 +17,18 @@ const postProduct = async (req, res) => {
 const getProduct = async (req, res) => {
    const {name} = req.query
     try {
-        const products = await Product.find()
+        
         if(name) {
-            const productQuery = products.filter(f => f.name.toLowerCase().includes(name.toLowerCase()))
-            if(productQuery) return res.status(200).json(productQuery)
+            // const productQuery = products.filter(f => f.name.toLowerCase().includes(name.toLowerCase()))
+
+            const productQuery = await Product.find({ name: { $regex: name , $options: 'i'}})
+            
+            if(productQuery.length > 0) return res.status(200).json(productQuery)
             else res.status(404).json({error : true , msg : 'producto no encontrado'})
         }
         
 
-
+        const products = await Product.find()
 
         res.status(200).json(products)
     } catch (error) {
