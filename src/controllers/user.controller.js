@@ -43,11 +43,14 @@ const getAllUsers = async (req, res) => {
   try {
     const users = await User.find();
     if (username) {
-      const userInQuery = users.filter((u) =>
-        u.username.toLowerCase().includes(username.toLowerCase())
-      );
-      if (userInQuery) return res.status(200).json(userInQuery);
-      else res.status(404).send(`No se encontró a ${username}`);
+      const userInQuery = await User.find({
+        username: { $regex: username, $options: "i" },
+      });
+      if (userInQuery !== []) {
+        return res.status(200).json(userInQuery);
+      } else {
+        return res.status(404).send(`${username} no encontrado`);
+      }
     }
     res.status(200).json(users);
   } catch (error) {
