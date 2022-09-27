@@ -29,7 +29,7 @@ const productsShema = mongoose.Schema({
        
     },
 
-    exits :{
+    exists :{
         type : Boolean,
         default : true,
     },
