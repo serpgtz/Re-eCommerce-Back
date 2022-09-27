@@ -39,13 +39,19 @@ const getUser = async (req, res) => {
 };
 
 const getAllUsers = async (req, res) => {
-  // const query = req.query.new;
+  const { username } = req.query;
   try {
-    //Sólo en caso de emergencia
-    //   const users = query
-    //     ? await User.find().sort({ _id: -1 }).limit(5)
-    //     : await User.find();
     const users = await User.find();
+    if (username) {
+      const userInQuery = await User.find({
+        username: { $regex: username, $options: "i" },
+      });
+      if (userInQuery !== []) {
+        return res.status(200).json(userInQuery);
+      } else {
+        return res.status(404).send(`${username} no encontrado`);
+      }
+    }
     res.status(200).json(users);
   } catch (error) {
     res.status(500).send(error);
