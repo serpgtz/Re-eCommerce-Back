@@ -38,6 +38,18 @@ const getUser = async (req, res) => {
   }
 };
 
+const getUserByQuery = async (req, res) => {
+  const username = req.query.username;
+  try {
+    if (username) {
+      const user = await User.find({ username: username.toLowerCase() });
+      res.status(200).json(user);
+    }
+  } catch (error) {
+    res.status(404).send(error);
+  }
+};
+
 const getAllUsers = async (req, res) => {
   // const query = req.query.new;
   try {
@@ -67,4 +79,5 @@ module.exports = {
   getUser,
   getAllUsers,
   deleteUser,
+  getUserByQuery,
 };
