@@ -75,7 +75,14 @@ const productsShema = mongoose.Schema({
         type: Number,
         required: true,
         default: 0
-    }
+    },
+
+    exists :{
+        type : Boolean,
+        default : true,
+    },
+   
+
 })
 
 const Product = mongoose.model('Product', productsShema )
