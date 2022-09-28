@@ -1,7 +1,7 @@
 const User = require("../models/User");
 const CryptoJS = require("crypto-js");
 const generarJWT = require("../helper/generateJWT");
-
+//REGISTRAR USUARIO
 const registerPost = async (req, res) => {
   const { username, email, password } = req.body;
 
@@ -22,8 +22,9 @@ const registerPost = async (req, res) => {
     console.log(error);
   }
 };
+//CONFIRMAR USUARIO
 const confirmUser = () => {};
-
+//AUTENTICAR USUARIO
 const authenticate = async (req, res) => {
   const user = await User.findOne({ username: req.body.username });
   !user && res.status(401).send("¡Usuario no existe!");
@@ -38,13 +39,11 @@ const authenticate = async (req, res) => {
     const inputPass = req.body.password;
     originalPassword !== inputPass
       ? res.status(401).json({ msg: "¡Password inválido!" })
-      : res
-          .status(200)
-          .json({
-            token: generarJWT(user.id),
-            error: false,
-            msg: "Usuario habilitado para loguearse",
-          });
+      : res.status(200).json({
+          token: generarJWT(user.id),
+          error: false,
+          msg: "Usuario habilitado para loguearse",
+        });
   }
 };
 
