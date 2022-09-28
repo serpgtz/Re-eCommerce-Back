@@ -95,6 +95,8 @@ const changePassword = async (req, res) => {
   }
 };
 
+const changePassword = () => {}
+
 module.exports = {
   registerPost,
   confirmUser,
