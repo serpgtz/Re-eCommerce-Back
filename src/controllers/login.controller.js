@@ -65,6 +65,7 @@ const authenticate = async (req, res) => {
         });
   }
 };
+
 //CAMBIAR CONTRASEÑA
 const changePassword = async (req, res) => {
   const inputPass = req.body.password;
@@ -94,7 +95,40 @@ const changePassword = async (req, res) => {
     res.status(500).json({ error: true, msg: "Contraseña incorrecta" });
   }
 };
+const forgotPassword = () => {};
 
+const checkToken = async (req, res) => {
+  const { token } = req.params;
+  const validateToken = await User.findOne({ token });
+  if (validateToken) {
+    res.json({ msg: "Token aprobado" });
+  } else {
+    return res.status(400).json({ error: true, msg: "Token inválido" });
+  }
+};
+
+const newPassword = async (req, res) => {
+  const { token } = req.params;
+  const { password } = req.body;
+
+  const user = await User.findOne({ token });
+
+  try {
+    user.token = null;
+    user.password = password;
+    await user.save();
+
+    res.json({ msg: "Password modificado con éxito" });
+  } catch (error) {
+    res.status(500).json({ error: true, msg: "Error al guardar" });
+  }
+
+  if (!user) {
+    return res
+      .status(400)
+      .json({ error: true, msg: "Hubo un error con el usuario" });
+  }
+};
 module.exports = {
   registerPost,
   confirmUser,
