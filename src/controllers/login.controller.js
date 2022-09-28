@@ -100,5 +100,5 @@ module.exports = {
   confirmUser,
   authenticate,
   changePassword,
-  forgotPassword,
+  // forgotPassword,
 };
