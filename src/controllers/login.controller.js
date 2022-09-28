@@ -70,6 +70,8 @@ const authenticate = async (req, res) => {
 
 const forgotPassword = () => {};
 
+const changePassword = () => {}
+
 module.exports = {
   registerPost,
   confirmUser,
