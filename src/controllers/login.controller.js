@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const CryptoJS = require("crypto-js");
 const generarJWT = require("../helper/generateJWT");
+const generateId = require("../helper/generateId")
 //REGISTRAR USUARIO
 const registerPost = async (req, res) => {
   const { username, email, password } = req.body;
@@ -69,7 +70,6 @@ const authenticate = async (req, res) => {
 //CAMBIAR CONTRASEÑA
 const changePassword = async (req, res) => {
   const inputPass = req.body.password;
-
   const hashPass = CryptoJS.AES.encrypt(inputPass, process.env.SECURITY_PASS);
   const oldPass = await User.findOne({
     password: CryptoJS.AES.decrypt(
@@ -95,7 +95,22 @@ const changePassword = async (req, res) => {
     res.status(500).json({ error: true, msg: "Contraseña incorrecta" });
   }
 };
-const forgotPassword = () => {};
+const forgotPassword = async (req, res) => {
+  const {email} = req.body
+  try {
+      const userExists = await User.findOne({email})
+      if(!userExists){
+       
+                return res.status(401).json({error : true , msg: 'el email no existe'})
+      }
+  
+      userExists.token = generateId()
+      await userExists.save()
+      res.json({msg: 'Hemos enviado un email con las instrucciones'})
+  } catch (error) {
+      console.log(error)
+  }
+};
 
 const checkToken = async (req, res) => {
   const { token } = req.params;
@@ -110,9 +125,7 @@ const checkToken = async (req, res) => {
 const newPassword = async (req, res) => {
   const { token } = req.params;
   const { password } = req.body;
-
   const user = await User.findOne({ token });
-
   try {
     user.token = null;
     user.password = password;
@@ -122,13 +135,14 @@ const newPassword = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: true, msg: "Error al guardar" });
   }
-
   if (!user) {
     return res
       .status(400)
       .json({ error: true, msg: "Hubo un error con el usuario" });
   }
 };
+
+
 module.exports = {
   registerPost,
   confirmUser,
