@@ -1,7 +1,7 @@
 const User = require("../models/User");
 const CryptoJS = require("crypto-js");
 const generarJWT = require("../helper/generateJWT");
-
+//REGISTRAR USUARIO
 const registerPost = async (req, res) => {
   const { username, email, password } = req.body;
 
@@ -22,6 +22,7 @@ const registerPost = async (req, res) => {
     console.log(error);
   }
 };
+//CONFIRMAR USUARIO
 const confirmUser = async (req, res) => {
     const {token} = req.params
   
@@ -40,8 +41,31 @@ const confirmUser = async (req, res) => {
     }
   } catch (error) {
     console.log(error)
+
   }
 };
+//AUTENTICAR USUARIO
+const authenticate = async (req, res) => {
+    const user = await User.findOne({ username: req.body.username });
+    !user && res.status(401).send("¡Usuario no existe!");
+    if (user.confirmed === false) {
+      return res.status(401).send("¡Usuario no confirmado!");
+    } else {
+      const hashPass = CryptoJS.AES.decrypt(
+        user.password,
+        process.env.SECURITY_PASS
+      );
+      const originalPassword = hashPass.toString(CryptoJS.enc.Utf8);
+      const inputPass = req.body.password;
+      originalPassword !== inputPass
+        ? res.status(401).json({ msg: "¡Password inválido!" })
+        : res.status(200).json({
+            token: generarJWT(user.id),
+            error: false,
+            msg: "Usuario habilitado para loguearse",
+          });
+  }}
+
 
 
 const forgotPassword = () => {};
