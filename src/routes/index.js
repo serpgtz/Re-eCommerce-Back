@@ -7,5 +7,5 @@ const router = Router();
 
 router.use("/", productRoutes);
 router.use("/", userRoutes);
-
+router.use("/", login)
 module.exports = router;
