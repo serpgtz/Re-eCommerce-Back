@@ -8,7 +8,7 @@ const {
 } = require("../../controllers/user.controller");
 const router = Router();
 
-router.post("/register", createNewUser);
+ // router.post("/register", createNewUser);
 
 router.get("/users", getAllUsers);
 router.get("/users/:id", getUser);
