@@ -23,7 +23,24 @@ const registerPost = async (req, res) => {
   }
 };
 //CONFIRMAR USUARIO
-const confirmUser = () => {};
+const confirmUser = async (req, res) => {
+  const { token } = req.params;
+
+  try {
+    const confirmedUser = await User.findOne({ token });
+    if (!confirmedUser) {
+      return res.status(400).json({ msg: "token no valido" });
+    } else {
+      confirmedUser.token = null;
+      confirmedUser.confirmed = true;
+      await confirmedUser.save();
+
+      res.json({ msg: "usuario registrado correctamente" });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
 //AUTENTICAR USUARIO
 const authenticate = async (req, res) => {
   const user = await User.findOne({ username: req.body.username });
@@ -46,7 +63,7 @@ const authenticate = async (req, res) => {
         });
   }
 };
-
+//CAMBIAR CONTRASEÑA
 const changePassword = async (req, res) => {
   const inputPass = req.body.password;
 
@@ -63,7 +80,7 @@ const changePassword = async (req, res) => {
       process.env.SECURITY_PASS
     );
     const updatedPassword = await User.findByIdAndUpdate(
-      req.params.token,
+      req.params.id,
       {
         $password: newPass,
       },
@@ -75,8 +92,6 @@ const changePassword = async (req, res) => {
     res.status(500).json({ error: true, msg: "Contraseña incorrecta" });
   }
 };
-
-const forgotPassword = () => {};
 
 module.exports = {
   registerPost,
