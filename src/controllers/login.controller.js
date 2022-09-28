@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const CryptoJS = require("crypto-js");
 const generarJWT = require("../helper/generateJWT");
+const generateId = require("../helper/generateId")
 //REGISTRAR USUARIO
 const registerPost = async (req, res) => {
   const { username, email, password } = req.body;
@@ -68,7 +69,6 @@ const authenticate = async (req, res) => {
 //CAMBIAR CONTRASEÑA
 const changePassword = async (req, res) => {
   const inputPass = req.body.password;
-
   const hashPass = CryptoJS.AES.encrypt(inputPass, process.env.SECURITY_PASS);
   const oldPass = await User.findOne({
     password: CryptoJS.AES.decrypt(
@@ -95,7 +95,26 @@ const changePassword = async (req, res) => {
   }
 };
 
-const changePassword = () => {}
+const forgotPassword = async (req, res) => {
+  const {email} = req.body
+
+  try {
+      const userExists = await User.findOne({email})
+      if(!userExists){
+       
+                return res.status(401).json({error : true , msg: 'el email no existe'})
+      }
+  
+      userExists.token = generateId()
+      await userExists.save()
+  
+      res.json({msg: 'Hemos enviado un email con las instrucciones'})
+  } catch (error) {
+      console.log(error)
+  }
+};
+
+
 
 module.exports = {
   registerPost,
