@@ -22,7 +22,8 @@ const registerPost = async (req, res) => {
     console.log(error);
   }
 };
-//CONFIRMAR USUARIO
+//CONFIRMAR USUARIO}
+
 const confirmUser = async (req, res) => {
   const { token } = req.params;
 
@@ -41,6 +42,7 @@ const confirmUser = async (req, res) => {
     console.log(error);
   }
 };
+
 //AUTENTICAR USUARIO
 const authenticate = async (req, res) => {
   const user = await User.findOne({ username: req.body.username });
