@@ -4,7 +4,7 @@ const {
   getAllUsers,
   modifyUser,
   deleteUser,
-} = require("../../controllers/user.controller");
+} = require("../../controllers/userForAdmin.controller");
 
 const router = Router();
 
