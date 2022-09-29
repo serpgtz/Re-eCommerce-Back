@@ -14,13 +14,19 @@ const postProduct = async (req, res) => {
 const getProduct = async (req, res) => {
   const { name, page, limit } = req.query;
   try {
-    if (page && limit) {
+    if (page <= 0) {
+      res.status(500).json({
+        error: true,
+        msg: "El paginado te odia porque le pasaste 0 menos",
+      });
+    }
+    if (page > 0 && limit) {
       const products = await Product.find()
         .limit(limit * 1)
         .skip((page - 1) * limit)
         .exec();
       const count = await Product.countDocuments();
-      res.json({
+      res.status(200).json({
         products,
         totalPages: Math.ceil(count / limit),
         currentPage: page,
