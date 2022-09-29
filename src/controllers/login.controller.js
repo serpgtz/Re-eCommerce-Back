@@ -1,7 +1,7 @@
 const User = require("../models/User");
 const CryptoJS = require("crypto-js");
 const generarJWT = require("../helper/generateJWT");
-const generateId = require("../helper/generateId")
+const generateId = require("../helper/generateId");
 //REGISTRAR USUARIO
 const registerPost = async (req, res) => {
   const { username, email, password } = req.body;
@@ -69,46 +69,45 @@ const authenticate = async (req, res) => {
 
 //CAMBIAR CONTRASEÑA
 const changePassword = async (req, res) => {
+  const { email } = req.body;
   const inputPass = req.body.password;
-  const hashPass = CryptoJS.AES.encrypt(inputPass, process.env.SECURITY_PASS);
-  const oldPass = await User.findOne({
-    password: CryptoJS.AES.decrypt(
-      req.body.password,
-      process.env.SECURITY_PASS
-    ),
-  });
-  if (hashPass === oldPass) {
-    const newPass = CryptoJS.AES.decrypt(
-      req.body.password,
+  const user = await User.findOne({ email });
+  if (!user) {
+    return res.status(403).json({ error: true, msg: "FORBIDDEN" });
+  }
+  const hashPass = CryptoJS.AES.decrypt(
+    user.password,
+    process.env.SECURITY_PASS
+  );
+  const oldPass = hashPass.toString(CryptoJS.enc.Utf8);
+
+  if (inputPass === oldPass) {
+    let { newPass } = req.body;
+    const updatedPassword = CryptoJS.AES.encrypt(
+      newPass,
       process.env.SECURITY_PASS
     );
-    const updatedPassword = await User.findByIdAndUpdate(
-      req.params.id,
-      {
-        $password: newPass,
-      },
-      { new: true }
-    );
-    res.status(200).json(updatedPassword);
-    return res.status(200).json();
+    user.password = updatedPassword;
+    user.save();
+    return res.status(200).json({ msg: "Contraseña actualizada" });
   } else {
     res.status(500).json({ error: true, msg: "Contraseña incorrecta" });
   }
 };
+
 const forgotPassword = async (req, res) => {
-  const {email} = req.body
+  const { email } = req.body;
   try {
-      const userExists = await User.findOne({email})
-      if(!userExists){
-       
-                return res.status(401).json({error : true , msg: 'el email no existe'})
-      }
-  
-      userExists.token = generateId()
-      await userExists.save()
-      res.json({msg: 'Hemos enviado un email con las instrucciones'})
+    const userExists = await User.findOne({ email });
+    if (!userExists) {
+      return res.status(401).json({ error: true, msg: "el email no existe" });
+    }
+
+    userExists.token = generateId();
+    await userExists.save();
+    res.json({ msg: "Hemos enviado un email con las instrucciones" });
   } catch (error) {
-      console.log(error)
+    console.log(error);
   }
 };
 
@@ -141,7 +140,6 @@ const newPassword = async (req, res) => {
       .json({ error: true, msg: "Hubo un error con el usuario" });
   }
 };
-
 
 module.exports = {
   registerPost,
