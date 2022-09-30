@@ -11,7 +11,7 @@ const categorySchema = mongoose.Schema({
         required: true,
         default: "Generic"
     },
-    model:{
+    model:{ 
         type: String,
         required: true,
         default: "no model...."
@@ -49,11 +49,11 @@ const categorySchema = mongoose.Schema({
         required : false,
         default : false
     },
-    inStorage:{
+    ram:{
         type: Number,
         required : false,
     },
-    exStorage:{
+    storagessd:{
         type: Number,
         required : false,
     },
@@ -69,6 +69,6 @@ const categorySchema = mongoose.Schema({
     }
 })
 
-const Category = mongoose.models('Category' , categorySchema) 
+const Category = mongoose.model('Category' , categorySchema) 
 
 module.exports = Category
