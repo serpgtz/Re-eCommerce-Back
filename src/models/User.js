@@ -5,6 +5,7 @@ const UserSchema = mongoose.Schema({
   username: {
     type: String,
     required: true,
+    Unique: true,
   },
   email: {
     type: String,
@@ -25,10 +26,10 @@ const UserSchema = mongoose.Schema({
     default: generateId(),
   },
 
-  confirmed : {
-    type : Boolean,
-    default : false,
-  }
+  confirmed: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const User = mongoose.model("User", UserSchema);
