@@ -11,7 +11,8 @@ const reviewSchema = mongoose.Schema({
     },
     comment : {
         type : String,
-        required : true
+        required : true,
+        default: "Any Comments"
     },
     user:{
         type: mongoose.Schema.Types.ObjectId,
@@ -33,7 +34,7 @@ const productsShema = mongoose.Schema({
     },
     comment : {
         type : String,
-        required : true
+        required : false
     },
 
 
