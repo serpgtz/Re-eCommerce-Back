@@ -5,7 +5,7 @@ const postProduct = async (req, res) => {
     const product = new Product(req.body);
     const productSave = await product.save();
 
-    res.status(200).json(productSave);
+    return res.status(200).json(productSave);
   } catch (error) {
     console.log(error);
   }
@@ -15,7 +15,7 @@ const getProduct = async (req, res) => {
   const { name, page, limit } = req.query;
   try {
     if (page <= 0) {
-      res.status(500).json({
+      return res.status(500).json({
         error: true,
         msg: "El paginado te odia porque le pasaste 0 menos",
       });
@@ -26,7 +26,7 @@ const getProduct = async (req, res) => {
         .skip((page - 1) * limit)
         .exec();
       const count = await Product.countDocuments();
-      res.status(200).json({
+      return res.status(200).json({
         products,
         totalPages: Math.ceil(count / limit),
         currentPage: page,
@@ -41,12 +41,12 @@ const getProduct = async (req, res) => {
       });
 
       if (productQuery.length > 0) return res.status(200).json(productQuery);
-      else res.status(404).json({ error: true, msg: "producto no encontrado" });
+      else return res.status(404).json({ error: true, msg: "producto no encontrado" });
     }
 
     const products = await Product.find();
 
-    res.status(200).json(products);
+    return res.status(200).json(products);
   } catch (error) {
     console.log(error);
   }
@@ -63,7 +63,7 @@ const updateProduct = async (req, res) => {
     productMatch.image = image;
     const update = await productMatch.save();
 
-    res.status(200).json(update);
+    return res.status(200).json(update);
   } catch (error) {
     console.log(error);
   }
@@ -79,7 +79,7 @@ const deleteProduct = async (req, res) => {
     productMatch.exists = false;
 
     const update = await productMatch.save();
-    res.status(200).json(update);
+    return res.status(200).json(update);
   } catch (error) {
     console.log(error);
   }
@@ -88,7 +88,7 @@ const deleteProduct = async (req, res) => {
 const getProductId = async (req, res) => {
   try {
     const productMatch = await Product.findById(req.params.id);
-    res.status(200).json(productMatch);
+    return res.status(200).json(productMatch);
   } catch (error) {
     console.log(error);
   }
