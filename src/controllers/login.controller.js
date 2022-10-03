@@ -47,7 +47,7 @@ const confirmUser = async (req, res) => {
 //AUTENTICAR USUARIO
 const authenticate = async (req, res) => {
   const user = await User.findOne({ username: req.body.username });
-  if(!user) return res.status(401).send("¡Usuario no existe!");
+  if(!user) return res.status(401).send({msg : "¡Usuario no existe!"});
   if (user.confirmed === false) {
     return res.status(401).send("¡Usuario no confirmado!");
   } else {
