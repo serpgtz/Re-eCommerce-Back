@@ -18,7 +18,7 @@ const registerPost = async (req, res) => {
     const user = new User({ username, email, password: encriptPassword });
     const userSave = await user.save();
 
-    res.status(200).json(userSave);
+    return res.status(200).json(userSave);
   } catch (error) {
     console.log(error);
   }
@@ -37,7 +37,7 @@ const confirmUser = async (req, res) => {
       confirmedUser.confirmed = true;
       await confirmedUser.save();
 
-      res.json({ msg: "usuario registrado correctamente" });
+      return res.json({ msg: "usuario registrado correctamente" });
     }
   } catch (error) {
     console.log(error);
@@ -90,7 +90,7 @@ const changePassword = async (req, res) => {
     user.save();
     return res.status(200).json({ msg: "Contraseña actualizada" });
   } else {
-    res.status(500).json({ error: true, msg: "Contraseña incorrecta" });
+    return res.status(500).json({ error: true, msg: "Contraseña incorrecta" });
   }
 };
 
@@ -104,7 +104,7 @@ const forgotPassword = async (req, res) => {
 
     userExists.token = generateId();
     await userExists.save();
-    res.json({ msg: "Hemos enviado un email con las instrucciones" });
+    return res.json({ msg: "Hemos enviado un email con las instrucciones" });
   } catch (error) {
     console.log(error);
   }
@@ -114,7 +114,7 @@ const checkToken = async (req, res) => {
   const { token } = req.params;
   const validateToken = await User.findOne({ token });
   if (validateToken) {
-    res.json({ msg: "Token aprobado" });
+    return res.json({ msg: "Token aprobado" });
   } else {
     return res.status(400).json({ error: true, msg: "Token inválido" });
   }
@@ -129,7 +129,7 @@ const newPassword = async (req, res) => {
     user.password = password;
     await user.save();
 
-    res.json({ msg: "Password modificado con éxito" });
+    return res.json({ msg: "Password modificado con éxito" });
   } catch (error) {
     res.status(500).json({ error: true, msg: "Error al guardar" });
   }
@@ -145,7 +145,7 @@ module.exports = {
   confirmUser,
   authenticate,
   changePassword,
-   forgotPassword,
-   checkToken,
-   newPassword
+  forgotPassword,
+  checkToken,
+  newPassword
 };
