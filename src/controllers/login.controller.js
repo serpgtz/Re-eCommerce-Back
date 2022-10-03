@@ -47,19 +47,18 @@ const confirmUser = async (req, res) => {
 //AUTENTICAR USUARIO
 const authenticate = async (req, res) => {
   const user = await User.findOne({ username: req.body.username });
-  !user && res.status(401).send("¡Usuario no existe!");
+  if(!user) return res.status(401).send("¡Usuario no existe!");
   if (user.confirmed === false) {
     return res.status(401).send("¡Usuario no confirmado!");
   } else {
     const hashPass = CryptoJS.AES.decrypt(
-      user.password,
+      user?.password,
       process.env.SECURITY_PASS
     );
     const originalPassword = hashPass.toString(CryptoJS.enc.Utf8);
     const inputPass = req.body.password;
-    originalPassword !== inputPass
-      ? res.status(401).json({ msg: "¡Password inválido!" })
-      : res.status(200).json({
+    if (originalPassword !== inputPass) return res.status(401).json({ msg: "¡Password inválido!" })
+      else res.status(200).json({
           token: generarJWT(user.id),
           error: false,
           msg: "Usuario habilitado para loguearse",
