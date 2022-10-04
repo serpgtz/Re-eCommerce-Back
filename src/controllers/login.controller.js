@@ -2,13 +2,15 @@ const User = require("../models/User");
 const CryptoJS = require("crypto-js");
 const generarJWT = require("../helper/generateJWT");
 const generateId = require("../helper/generateId");
+const emailRegister = require('../helper/confirmEmail')
 //REGISTRAR USUARIO
 const registerPost = async (req, res) => {
   const { username, email, password } = req.body;
 
   const userExists = await User.findOne({ email });
+  const userName = await User.findOne({username})
 
-  if (userExists)
+  if (userExists || userName)
     return res.status(400).json({ error: true, msg: "usuario ya registrado" });
   try {
     const encriptPassword = CryptoJS.AES.encrypt(
@@ -16,7 +18,13 @@ const registerPost = async (req, res) => {
       process.env.SECURITY_PASS
     );
     const user = new User({ username, email, password: encriptPassword });
-    const userSave = await user.save();
+    const userSave = await user.save();   
+
+    emailRegister({
+      email,
+      username,
+      token : user.token
+    })
 
     return res.status(200).json(userSave);
   } catch (error) {
@@ -49,7 +57,7 @@ const authenticate = async (req, res) => {
   const user = await User.findOne({ username: req.body.username });
   if(!user) return res.status(401).send({msg : "¡Usuario no existe!"});
   if (user.confirmed === false) {
-    return res.status(401).send("¡Usuario no confirmado!");
+    return res.status(401).send({ msg: "¡Usuario no confirmado!"});
   } else {
     const hashPass = CryptoJS.AES.decrypt(
       user?.password,
