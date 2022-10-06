@@ -12,7 +12,7 @@ const postProduct = async (req, res) => {
 };
 
 const getProduct = async (req, res) => {
-  const { name, page, limit } = req.query;
+  const { name, page, limit, price, rating, description } = req.query;
   try {
     if (page <= 0) {
       return res.status(500).json({
@@ -34,14 +34,48 @@ const getProduct = async (req, res) => {
     }
 
     if (name) {
-      // const productQuery = products.filter(f => f.name.toLowerCase().includes(name.toLowerCase()))
-
       const productQuery = await Product.find({
         name: { $regex: name, $options: "i" },
       });
 
       if (productQuery.length > 0) return res.status(200).json(productQuery);
-      else return res.status(404).json({ error: true, msg: "producto no encontrado" });
+      else
+        return res
+          .status(404)
+          .json({ error: true, msg: "producto no encontrado" });
+    }
+    if (description) {
+      const productQuery = await Product.find({
+        description: { $regex: description, $options: "i" },
+      });
+
+      if (productQuery.length > 0) return res.status(200).json(productQuery);
+      else
+        return res
+          .status(404)
+          .json({ error: true, msg: "producto no encontrado" });
+    }
+    if (price) {
+      const products = await Product.find();
+      if (price === "asc") {
+        const productQuery = products.sort((a, b) => a.price - b.price);
+        return res.status(200).json(productQuery);
+      }
+      if (price === "dsc") {
+        const productQuery = products.sort((a, b) => b.price - a.price);
+        return res.status(200).json(productQuery);
+      }
+    }
+    if (rating) {
+      const products = await Product.find();
+      if (rating === "asc") {
+        const productQuery = products.sort((a, b) => a.rating - b.rating);
+        return res.status(200).json(productQuery);
+      }
+      if (rating === "dsc") {
+        const productQuery = products.sort((a, b) => b.rating - a.rating);
+        return res.status(200).json(productQuery);
+      }
     }
 
     const products = await Product.find();
