@@ -25,57 +25,76 @@ const getProduct = async (req, res) => {
         .limit(limit * 1)
         .skip((page - 1) * limit)
         .exec();
+      if (name && page > 0 && limit) {
+        const productQuery = await Product.find({
+          name: { $regex: name, $options: "i" },
+        })
+          .limit(limit * 1)
+          .skip((page - 1) * limit)
+          .exec();
+
+        if (productQuery.length > 0) return res.status(200).json(productQuery);
+        else
+          return res
+            .status(404)
+            .json({ error: true, msg: "producto no encontrado" });
+      }
+      if (description && page > 0 && limit) {
+        const productQuery = await Product.find({
+          description: { $regex: description, $options: "i" },
+        })
+          .limit(limit * 1)
+          .skip((page - 1) * limit)
+          .exec();
+
+        if (productQuery.length > 0) return res.status(200).json(productQuery);
+        else
+          return res
+            .status(404)
+            .json({ error: true, msg: "producto no encontrado" });
+      }
+      if (price && page > 0 && limit) {
+        if (price === "asc") {
+          const productQuery = await Product.find()
+            .limit(limit * 1)
+            .skip((page - 1) * limit)
+            .sort({ price: "asc", test: -1 })
+            .exec();
+          return res.status(200).json(productQuery);
+        }
+        if (price === "dsc") {
+          const productQuery = await Product.find()
+            .limit(limit * 1)
+            .skip((page - 1) * limit)
+            .sort({ price: "desc", test: -1 })
+            .exec();
+          return res.status(200).json(productQuery);
+        }
+      }
+      if (rating && page > 0 && limit) {
+        if (rating === "asc") {
+          const productQuery = await Product.find()
+            .limit(limit * 1)
+            .skip((page - 1) * limit)
+            .sort({ rating: "asc", test: -1 })
+            .exec();
+          return res.status(200).json(productQuery);
+        }
+        if (rating === "dsc") {
+          const productQuery = await Product.find()
+            .limit(limit * 1)
+            .skip((page - 1) * limit)
+            .sort({ rating: "desc", test: -1 })
+            .exec();
+          return res.status(200).json(productQuery);
+        }
+      }
       const count = await Product.countDocuments();
       return res.status(200).json({
         products,
         totalPages: Math.ceil(count / limit),
         currentPage: page,
       });
-    }
-
-    if (name) {
-      const productQuery = await Product.find({
-        name: { $regex: name, $options: "i" },
-      });
-
-      if (productQuery.length > 0) return res.status(200).json(productQuery);
-      else
-        return res
-          .status(404)
-          .json({ error: true, msg: "producto no encontrado" });
-    }
-    if (description) {
-      const productQuery = await Product.find({
-        description: { $regex: description, $options: "i" },
-      });
-
-      if (productQuery.length > 0) return res.status(200).json(productQuery);
-      else
-        return res
-          .status(404)
-          .json({ error: true, msg: "producto no encontrado" });
-    }
-    if (price) {
-      const products = await Product.find();
-      if (price === "asc") {
-        const productQuery = products.sort((a, b) => a.price - b.price);
-        return res.status(200).json(productQuery);
-      }
-      if (price === "dsc") {
-        const productQuery = products.sort((a, b) => b.price - a.price);
-        return res.status(200).json(productQuery);
-      }
-    }
-    if (rating) {
-      const products = await Product.find();
-      if (rating === "asc") {
-        const productQuery = products.sort((a, b) => a.rating - b.rating);
-        return res.status(200).json(productQuery);
-      }
-      if (rating === "dsc") {
-        const productQuery = products.sort((a, b) => b.rating - a.rating);
-        return res.status(200).json(productQuery);
-      }
     }
 
     const products = await Product.find();
