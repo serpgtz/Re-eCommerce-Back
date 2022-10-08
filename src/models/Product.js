@@ -22,6 +22,7 @@ const reviewSchema = mongoose.Schema({
 
 })
 
+
 const productsShema = mongoose.Schema({
     name : {
         type : String,
@@ -32,37 +33,26 @@ const productsShema = mongoose.Schema({
         required: true,
         default: 0
     },
-    comment : {
-        type : String,
-        required : false
-    },
-
-
     price : {
         type : Number,
         required : true
     },
-
     description : {
         type: String,
         required : true
     },
-
     stock : {
         type : Number,
         required: true,
     },
-
     countInStock : {
         type : Number,
         required: true,
         default: 0
     },
-
     image : {
         type : String,
-        required : true,
-       
+        required : true,   
     },
     rating: {
         type: Number,
@@ -77,12 +67,14 @@ const productsShema = mongoose.Schema({
         required: true,
         default: 0
     },
-
     exists :{
         type : Boolean,
         default : true,
     },
-   
+    arrayImag:[{
+        type : String,
+        required: false
+    }]
 
 })
 
