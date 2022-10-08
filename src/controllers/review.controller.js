@@ -29,7 +29,7 @@ const getReview = async (req, res) => {
   const { reviewId } = req.params;
   if (reviewId) {
     const review = await Review.findById(reviewId);
-    if (review !== []) {
+    if (review) {
       return res.status(200).json(review);
     } else {
       return res.status(404).send(`Review no existente`);
@@ -43,7 +43,7 @@ const getUserReviews = async (req, res) => {
     const user = await User.findById(userId);
     console.log(user);
     const reviews = user.reviews;
-    if (reviews !== []) {
+    if (reviews) {
       return res.status(200).json(reviews);
     } else {
       return res.status(404).send(`Aún no hay reviews`);
@@ -57,7 +57,7 @@ const getProductReviews = async (req, res) => {
     const product = await Product.findById(productId);
     console.log(product);
     const reviews = product.reviews;
-    if (reviews !== []) {
+    if (reviews) {
       return res.status(200).json(reviews);
     } else {
       return res.status(404).send(`Aún no hay reviews`);
