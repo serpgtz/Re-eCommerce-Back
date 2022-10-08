@@ -17,40 +17,54 @@ const postReview = async (req, res) => {
   }
 };
 const getAllReviews = async (req, res) => {
-  const { productId, userId, reviewId } = req.params;
   try {
     const reviews = await Review.find();
-    if (reviewId) {
-      const review = await Review.findById(reviewId);
-      if (review !== []) {
-        return res.status(200).json(review);
-      } else {
-        return res.status(404).send(`Review no existente`);
-      }
-    }
-    if (productId && reviewId) {
-      const product = await Product.findById(productId);
-      const reviews = product.reviews;
-      if (reviews !== []) {
-        return res.status(200).json(reviews);
-      } else {
-        return res.status(404).send(`Aún no hay reviews`);
-      }
-    }
-    if (userId && reviewId) {
-      const user = await User.findById(userId);
-      const reviews = user.reviews;
-      if (reviews !== []) {
-        return res.status(200).json(reviews);
-      } else {
-        return res.status(404).send(`Aún no hay reviews`);
-      }
-    }
     res.status(200).json(reviews);
   } catch (error) {
     res.status(500).send(error);
   }
 };
+
+const getReview = async (req, res) => {
+  const { reviewId } = req.params;
+  if (reviewId) {
+    const review = await Review.findById(reviewId);
+    if (review !== []) {
+      return res.status(200).json(review);
+    } else {
+      return res.status(404).send(`Review no existente`);
+    }
+  }
+};
+const getUserReviews = async (req, res) => {
+  const { userId } = req.params;
+  if (userId) {
+    console.log(userId);
+    const user = await User.findById(userId);
+    console.log(user);
+    const reviews = user.reviews;
+    if (reviews !== []) {
+      return res.status(200).json(reviews);
+    } else {
+      return res.status(404).send(`Aún no hay reviews`);
+    }
+  }
+};
+
+const getProductReviews = async (req, res) => {
+  const { productId } = req.params;
+  if (productId) {
+    const product = await Product.findById(productId);
+    console.log(product);
+    const reviews = product.reviews;
+    if (reviews !== []) {
+      return res.status(200).json(reviews);
+    } else {
+      return res.status(404).send(`Aún no hay reviews`);
+    }
+  }
+};
+
 const deleteReview = async (req, res) => {
   const _id = req.params.reviewId;
 
@@ -68,6 +82,9 @@ const deleteReview = async (req, res) => {
 };
 
 module.exports = {
+  getProductReviews,
+  getUserReviews,
+  getReview,
   postReview,
   getAllReviews,
   deleteReview,
