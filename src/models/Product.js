@@ -55,7 +55,12 @@ const productsShema = mongoose.Schema({
     required: true,
     default: 0,
   },
-
+  arrayImag: [
+    {
+      type: String,
+      required: false,
+    },
+  ],
   exists: {
     type: Boolean,
     default: true,
