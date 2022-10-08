@@ -15,6 +15,10 @@ const reviewSchema = mongoose.Schema({
     required: true,
     default: "Any Comments",
   },
+  exists: {
+    type: Boolean,
+    default: true,
+  },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     require: true,

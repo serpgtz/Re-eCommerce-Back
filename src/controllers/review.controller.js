@@ -33,12 +33,18 @@ const getAllReviews = async (req, res) => {
   }
 };
 const deleteReview = async (req, res) => {
-  const { _id } = req.params;
+  const _id = req.params.reviewId;
+
   try {
-    await Review.findByIdAndDelete(_id);
-    res.status(200).send("REVIEW DELETED");
+    // no se elimina de la bdd pero si tendra la propiedad existe : false
+    const reviewMatch = await Review.findById(_id);
+
+    reviewMatch.exists = false;
+
+    const update = await reviewMatch.save();
+    return res.status(200).json(update);
   } catch (error) {
-    res.status(500).send(error);
+    console.log(error);
   }
 };
 
