@@ -1,3 +1,4 @@
+const Product = require("../models/Product");
 const Review = require("../models/Review");
 const User = require("../models/User");
 
@@ -19,12 +20,30 @@ const getAllReviews = async (req, res) => {
   const { productId, userId, reviewId } = req.params;
   try {
     const reviews = await Review.find();
-    if (productId && userId && reviewId) {
+    if (reviewId) {
       const review = await Review.findById(reviewId);
       if (review !== []) {
         return res.status(200).json(review);
       } else {
         return res.status(404).send(`Review no existente`);
+      }
+    }
+    if (productId && reviewId) {
+      const product = await Product.findById(productId);
+      const reviews = product.reviews;
+      if (reviews !== []) {
+        return res.status(200).json(reviews);
+      } else {
+        return res.status(404).send(`Aún no hay reviews`);
+      }
+    }
+    if (userId && reviewId) {
+      const user = await User.findById(userId);
+      const reviews = user.reviews;
+      if (reviews !== []) {
+        return res.status(200).json(reviews);
+      } else {
+        return res.status(404).send(`Aún no hay reviews`);
       }
     }
     res.status(200).json(reviews);
