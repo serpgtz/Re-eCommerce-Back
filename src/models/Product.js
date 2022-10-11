@@ -30,6 +30,7 @@ const productsShema = mongoose.Schema({
     required: true,
   },
 
+  //stockFalse .... .|.
   countInStock: {
     type: Number,
     required: true,
