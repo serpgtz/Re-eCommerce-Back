@@ -10,7 +10,7 @@ const {
 
 const router = Router();
 //CREAR
-router.post("/product/:productId/:userId/review", postReview);
+router.post("/product/:productId/review", postReview);
 //TRAER TODAS
 router.get("/reviews", getAllReviews);
 //TRAER UNA EN PARTICULAR
