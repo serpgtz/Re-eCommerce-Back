@@ -3,7 +3,7 @@ const {postOrder, notification} = require("../../controllers/mercagoPago.control
 
 const router = Router()
 
-router.post('/post-order', postOrder)
+router.post('/post-order/:id', postOrder)
 router.post('/notification', notification)
 
 

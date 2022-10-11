@@ -6,6 +6,8 @@ const orderSchema = mongoose.Schema({
         required : true,
         ref: "User",
     },
+
+ 
     orderItems:[
         {
             name: { type: String, required: true},
@@ -19,22 +21,24 @@ const orderSchema = mongoose.Schema({
             },
         },
     ],
-    shippingAddress:{
-        Addres:{ type: String, required : true},
-        city:{ type: String, required : true},
-        postalCode: { type: String, required : true}
-        //country¿?
-    },
+    // shippingAddress:{
+    //     Addres:{ type: String, required : true},
+    //     city:{ type: String, required : true},
+    //     postalCode: { type: String, required : true}
+    //     //country¿?
+    // },
     PaymentMethod:{
         type: String,
-        required: true,
         default: 'MercadoPago'
     },
-    paymentResult:{
-        id:{type: String},
-        status: {type:String},
-        update_time: { type: String},
-        email_address: { type: String},
+
+    status : {
+        type:String,
+        default : 'Pending'
+    },
+
+    email_address : {
+        type: String
     },
     shippingPrice:{
         type: Number,
