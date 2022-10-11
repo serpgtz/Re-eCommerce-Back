@@ -3,7 +3,9 @@ const Review = require("../models/Review");
 const User = require("../models/User");
 
 const postReview = async (req, res) => {
-  const { productId, userId } = req.params;
+  const { productId } = req.params;
+  const { userId } = req.body;
+  console.log(userId);
   if (productId && userId) {
     try {
       const review = new Review({
@@ -28,7 +30,7 @@ const postReview = async (req, res) => {
 
       return res.status(201).json(reviewSave);
     } catch (error) {
-      console.log(error);
+      res.status(500).json({ msg: "Tu mamá" });
     }
   }
 };
