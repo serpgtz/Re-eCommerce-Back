@@ -4,11 +4,27 @@ const User = require("../models/User");
 
 const postReview = async (req, res) => {
   const { productId, userId } = req.params;
-  console.log(productId, "Tengo el poder", userId);
   if (productId && userId) {
     try {
-      const review = new Review(req.body);
+      const review = new Review({
+        product: productId,
+        user: userId,
+        comment: req.body.comment,
+        rating: req.body.rating,
+      });
       const reviewSave = await review.save();
+      if (reviewSave) {
+        await Product.findByIdAndUpdate(
+          { _id: productId },
+          {
+            $set: {
+              rating: req.body.rating,
+              numReviews: +1,
+              reviews: review._id,
+            },
+          }
+        );
+      }
 
       return res.status(201).json(reviewSave);
     } catch (error) {
