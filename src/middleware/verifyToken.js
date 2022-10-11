@@ -13,6 +13,7 @@ const verifyToken = async (req, res, next) => {
     const verify = jwt.verify(token , process.env.JWT_SEC)
     const user = await User.findById(verify.id)
      const userFront = {
+        _id : user._id,
         name : user.username,
         email : user.email,
         admin : user.admin
