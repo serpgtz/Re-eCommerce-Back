@@ -14,7 +14,7 @@ const mongooseConection = async () => {
              console.log(`mongo DB conectado en . : ${url}`)
         
     } catch (error) {
-        console.log(error)
+        console.log("error",error)
         process.exit(1)
     }
 }
