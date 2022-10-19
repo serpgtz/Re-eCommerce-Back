@@ -64,9 +64,27 @@ const orderSchema = mongoose.Schema({
         required: true,
         default: false
     },
-    delivered:{
-        type: Date
+    date:{
+        type: Date,
+        default: Date.now
+    },
+
+    address : {
+        type : String,
+        required : true
+    },
+
+    userPaymentInfo : {
+        name: {type: String},
+        lastName: {type: String},
+        phone: {type: Number},
+        address_user: {type: String},
+        info: {type: String},
+        email:{type: String}
+
     }
+
+    
 })
 const OrderModel = mongoose.model('OrderModel', orderSchema )
 

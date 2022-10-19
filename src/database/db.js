@@ -11,10 +11,10 @@ const mongooseConection = async () => {
             useUnifiedTopology : true,
         })
         const url = `${db.connection.host}:${db.connection.port}`
-             console.log(`mongo DB conectado en . : ${url}`)
+             console.log(`mongo DB conectado en : ${url}`)
         
     } catch (error) {
-        console.log("error",error)
+        console.log(error)
         process.exit(1)
     }
 }

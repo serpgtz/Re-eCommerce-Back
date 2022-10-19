@@ -14,13 +14,13 @@ const mercadoPagoLink = async (products) => {
             items: products.map(p => {
                 return {
                     title: p.name,
-                    quantity: p.quantity,
+                    quantity: p.count,
                     currency_id: 'ARS',
                     unit_price: p.price
                 }
             }),
     
-            notification_url : 'https://10e2-2800-810-513-68e-7cc4-e94a-469b-4cc9.sa.ngrok.io/notification'
+            notification_url :'http://localhost:3000/notification'
           };
           
          const response = await mercadoPago.preferences.create(preference)
